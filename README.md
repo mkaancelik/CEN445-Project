@@ -100,3 +100,58 @@ The dashboard includes at least **9 distinct visualizations**, with **6+ advance
 ```bash
 git clone https://github.com/mkaancelik/CEN445-Project.git
 cd global-power-plant-dashboard
+
+4.2. Create and Activate a Virtual Environment (Optional but Recommended)
+# Create virtual environment
+python -m venv venv
+
+# Activate on Windows
+venv\Scripts\activate
+
+# Activate on macOS / Linux
+# source venv/bin/activate
+
+4.3. Install Dependencies
+
+Make sure a requirements.txt file exists with at least:
+
+streamlit
+pandas
+numpy
+plotly
+altair
+scikit-learn
+
+
+Then run:
+
+pip install -r requirements.txt
+
+4.4. Prepare the Dataset
+
+Create a folder named data in the project root if it does not exist.
+
+Download the Global Power Plant Database CSV file.
+
+Save it as:
+
+data/global_power_plant_database.csv
+
+
+If your file name or path is different, update the DATA_PATH variable inside app.py accordingly.
+
+4.5. Run the Streamlit Application
+streamlit run app.py
+
+
+Open the URL shown in the terminal (usually http://localhost:8501) in your browser.
+
+5. Repository Structure
+global-power-plant-dashboard/
+│
+├─ app.py                       # Main Streamlit application
+├─ requirements.txt             # Python dependencies
+├─ README.md                    # Project documentation (this file)
+├─ report.pdf / report.md       # One-page project report (optional)
+└─ data/
+   └─ global_power_plant_database.csv   # Dataset file (not committed if large)
