@@ -146,9 +146,8 @@ global-power-plant-dashboard/
 
 Our team consists of three members. Each member was responsible for **one basic visualization method** and **two advanced visualization methods**, in addition to shared tasks such as discussion of design choices and debugging.
 
-> Replace the placeholder names (Member 1/2/3) with your real names.
 
-- **Member 1 – Data Loading, Preprocessing & Map-Based Analysis**  
+- **Kaan Çelik  – Data Loading, Preprocessing & Map-Based Analysis**  
   - Implemented the initial data loading and cleaning pipeline:
     - Selected relevant columns from the Global Power Plant Database.
     - Handled missing values for `primary_fuel`, `country_long`, and `commissioning_year`.
@@ -159,7 +158,7 @@ Our team consists of three members. Each member was responsible for **one basic 
     - Implemented the **global Mapbox map**, where each power plant is plotted with color = primary fuel and size = capacity.
     - Implemented the **treemap** summarizing *total installed capacity by fuel type and country*.
 
-- **Member 2 – Hierarchical & Multivariate Visualization Design**  
+- Galip Diler – Hierarchical & Multivariate Visualization Design**  
   - Worked on the visual layout and consistency of chart titles, labels, legends, and color schemes.
   - **Basic method (1 simple visualization):**
     - Implemented the **boxplot** illustrating the *distribution of plant capacity by primary fuel type*.
@@ -167,7 +166,7 @@ Our team consists of three members. Each member was responsible for **one basic 
     - Implemented the **sunburst diagram** showing *installed capacity by primary fuel and commissioning decade*.
     - Implemented the **parallel coordinates plot** linking *capacity (clipped), commissioning year, and estimated generation* to support multivariate analysis.
 
-- **Member 3 – Statistical Relationships, Heatmap & Machine Learning Component**  
+- Ahmet Can Köreli  – Statistical Relationships, Heatmap & Machine Learning Component**  
   - Integrated the different tabs in Streamlit (Overview, Advanced Visualizations, Clustering & ML) and tested interactive behavior.
   - **Basic method (1 simple visualization):**
     - Implemented the **scatter plot (log–log)** of *installed capacity vs. estimated annual generation*, including hover tooltips.
@@ -182,4 +181,3 @@ In addition to the individual responsibilities listed above, all team members co
 - Discussing the overall dashboard design and user experience.
 - Testing the application, fixing minor bugs, and refining the filters in the Streamlit sidebar.
 - Reviewing the final report and README for clarity and consistency.
-
