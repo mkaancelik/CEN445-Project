@@ -55,7 +55,7 @@ In our project, we also derive:
 ### Dataset File / Source Link
 
 - Local file used by the app:  
-  `data/global_power_plant_database.csv`
+  `global_power_plant_database.csv`
 
 - Example source link (replace with the exact URL you used):  
   - WRI GitHub: `<https://github.com/wri/global-power-plant-database>`  
