@@ -61,7 +61,7 @@ In our project, we also derive:
   - WRI GitHub: `<https://github.com/wri/global-power-plant-database>`  
   - or Kaggle: `<https://www.kaggle.com/>` (search: “Global Power Plant Database”)
 
----
+----
 
 ## 3. Features and Visualizations
 
