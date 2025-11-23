@@ -163,6 +163,7 @@ Our team consists of three members. Each member was responsible for **one basic 
   - **Advanced methods (2 complex visualizations):**
     - Implemented the **sunburst diagram** showing *installed capacity by primary fuel and commissioning decade*.
     - Implemented the **parallel coordinates plot** linking *capacity (clipped), commissioning year, and estimated generation* to support multivariate analysis.
+    - Implemented the **Sankey diagram** visualizing the flow of total capacity from *primary fuel types* to the *top 10 countries*.
 
 - Ahmet Can Köreli  – Statistical Relationships, Heatmap & Machine Learning Component**  
   - Integrated the different tabs in Streamlit (Overview, Advanced Visualizations, Clustering & ML) and tested interactive behavior.
