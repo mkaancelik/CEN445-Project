@@ -57,7 +57,7 @@ In our project, we also derive:
 - Local file used by the app:  
   `global_power_plant_database.csv`
 
-- Example source link (replace with the exact URL you used):  
+- Example source link:  
   - WRI GitHub: `<https://github.com/wri/global-power-plant-database>`  
   - or Kaggle: `<https://www.kaggle.com/>` (search: “Global Power Plant Database”)
 
