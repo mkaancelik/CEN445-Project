@@ -139,8 +139,7 @@ global-power-plant-dashboard/
 ├─ requirements.txt             # Python dependencies
 ├─ README.md                    # Project documentation (this file)
 ├─ report.pdf / report.md       # One-page project report (optional)
-└─ data/
-   └─ global_power_plant_database.csv   # Dataset file (not committed if large)
+└─ global_power_plant_database.csv   # Dataset file (not committed if large)
 -----------
 ## 6. Team Members and Contributions
 
