@@ -97,7 +97,7 @@ The dashboard includes at least **9 distinct visualizations**, with **6+ advance
 
 ### 4.1. Clone the Repository
 
-
+``` bash
 git clone https://github.com/mkaancelik//CEN445-Project.git
 cd global-power-plant-dashboard
 4.2. Create and Activate a Virtual Environment
