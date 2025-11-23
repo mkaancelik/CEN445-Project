@@ -128,7 +128,7 @@ Create a folder named data in the project root if it does not exist.
 
 Download the Global Power Plant Database CSV file.
 
-Save it as:data/global_power_plant_database.csv
+Save it as:global_power_plant_database.csv
 4.5. Run the Streamlit Application
 streamlit run app.py
 Open the URL shown in the terminal (usually http://localhost:8501) in your browser.
