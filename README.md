@@ -148,7 +148,7 @@ Our team consists of three members. Each member was responsible for **one basic 
 **two advanced visualization methods**, in addition to shared tasks such as discussion of design choices and debugging.
 
 
-- **Kaan Çelik  – Data Loading, Preprocessing & Map-Based Analysis**  
+- **Mustafa Kaan Çelik  – Data Loading, Preprocessing & Map-Based Analysis**  
   - Implemented the initial data loading and cleaning pipeline:
     - Selected relevant columns from the Global Power Plant Database.
     - Handled missing values for `primary_fuel`, `country_long`, and `commissioning_year`.
