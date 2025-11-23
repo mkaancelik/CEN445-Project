@@ -156,7 +156,7 @@ Our team consists of three members. Each member was responsible for **one basic 
     - Implemented the **global Mapbox map**, where each power plant is plotted with color = primary fuel and size = capacity.
     - Implemented the **treemap** summarizing *total installed capacity by fuel type and country*.
 
-- Galip Diler – Hierarchical & Multivariate Visualization Design**  
+- Galip Diler – Hierarchical, Multivariate & Flow Visualization Design**  
   - Worked on the visual layout and consistency of chart titles, labels, legends, and color schemes.
   - **Basic method (1 simple visualization):**
     - Implemented the **boxplot** illustrating the *distribution of plant capacity by primary fuel type*.
