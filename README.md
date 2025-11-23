@@ -1,72 +1,102 @@
 # Global Power Plant Exploratory Data Visualization Dashboard
 
-This project is an interactive dashboard built with **Python** and **Streamlit** to explore the **Global Power Plant Database**. The dataset contains grid-scale power plants (≥ 1 MW) around the world with information on location, capacity, fuel type, ownership and generation. :contentReference[oaicite:2]{index=2}
+This repository contains an interactive data visualization dashboard built with **Python** and **Streamlit** to explore the **Global Power Plant Database**. The application allows users to analyze power plants around the world by fuel type, location, capacity, and commissioning year, and includes both advanced visualizations and a simple machine learning component (K-Means clustering).
 
-## 1. Dataset
+---
 
-- **Name:** Global Power Plant Database (v1.3)
-- **Source:** World Resources Institute (WRI) / Kaggle
-- **Rows:** ≈ 30,000+ power plants from 160+ countries
-- **Columns (subset used):**
-  - `country`, `country_long`
-  - `name`
-  - `latitude`, `longitude`
-  - `capacity_mw`
-  - `primary_fuel`, `other_fuel1–3`
-  - `commissioning_year`, `year_of_capacity_data`
-  - `generation_gwh_2013–2017`
-  - `estimated_generation_gwh_2013–2017`
-- Each row represents a single power plant. :contentReference[oaicite:3]{index=3}  
+## 1. Project Description
 
-Dataset link: *(add the exact Kaggle / WRI URL you used)*
+The main objective of this project is to design and implement an **exploratory data visualization dashboard** that:
 
-## 2. Project Goals
+- Provides an interactive and user-friendly interface for exploring the global power plant dataset.
+- Uses multiple advanced visualization techniques (treemap, sunburst, parallel coordinates, Sankey diagram, maps, etc.).
+- Enables users to filter and drill down into the data using controls such as dropdowns, sliders, and multiselect widgets.
+- Demonstrates the use of a basic machine learning model (K-Means) to cluster power plants based on their characteristics.
 
-- Clean and preprocess the dataset (handle missing values, clip outliers, derive new features).
-- Build an interactive dashboard that:
-  - Shows global patterns of installed capacity and fuel mix.
-  - Visualizes spatial distribution of power plants.
-  - Explores relationships between capacity, commissioning year and generation.
-  - Uses at least **9 distinct visualizations**, including at least **6 advanced** charts.
-  - Demonstrates basic machine learning (K-Means clustering).
+The dashboard is organized into three main tabs:
 
-## 3. Visualization Techniques
+1. **Overview & Basic Charts** – high-level country and fuel comparisons.
+2. **Advanced Visualizations** – spatial, hierarchical, and multivariate views.
+3. **Clustering & ML** – K-Means clustering on selected numerical features.
 
-The dashboard implements the following visualizations:
+---
 
-1. **Bar Chart** – Top countries by total installed capacity (MW).
-2. **Boxplot** – Distribution of plant capacity by primary fuel type.
-3. **Scatter Plot** – Capacity vs. estimated annual generation (log–log scale).
-4. **World Map (Mapbox)** – Geographic distribution of plants, colored by fuel and sized by capacity.
-5. **Treemap** – Total capacity by fuel type and country.
-6. **Sunburst Diagram** – Capacity by fuel type and commissioning decade.
-7. **Parallel Coordinates Plot** – Capacity, commissioning year and estimated generation.
-8. **Heatmap (Altair)** – Total capacity by fuel type and commissioning decade.
-9. **K-Means Clustering Scatter Plot** – Clusters of plants based on capacity and generation.
+## 2. Dataset Details
 
-All charts are interactive (hover, zoom, pan, filter). The sidebar includes:
-- Country filter (multiselect)
-- Primary fuel filter (multiselect)
-- Capacity range slider
-- Commissioning year range slider
-- Cluster number slider (for K-Means)
+**Dataset name:** Global Power Plant Database (v1.3)  
+**Source:** World Resources Institute (WRI) / Kaggle (open data)  
 
-## 4. Installation & Usage
+Each row represents a single grid-scale power plant (typically ≥ 1 MW) and includes:
+
+- **Identification & location**
+  - `name` – Plant name  
+  - `country`, `country_long` – Country code and full name  
+  - `latitude`, `longitude` – Geographic coordinates  
+
+- **Technical attributes**
+  - `capacity_mw` – Installed capacity in megawatts (MW)  
+  - `primary_fuel` – Main fuel type (Coal, Gas, Hydro, Wind, Solar, Nuclear, Biomass, etc.)  
+  - `other_fuel1`, `other_fuel2`, `other_fuel3` – Additional fuels (if any)  
+
+- **Temporal attributes**
+  - `commissioning_year` – Approximate year the plant was commissioned  
+  - `year_of_capacity_data` – Year of capacity data (if available)  
+
+- **Generation-related attributes**
+  - `generation_gwh_20xx` – Reported generation in specific years (if available)  
+  - `estimated_generation_gwh_20xx` – Estimated annual generation for some years  
+
+In our project, we also derive:
+
+- `capacity_mw_clipped` – Capacity clipped to the 1st and 99th percentile to reduce extreme outliers.
+- `commissioning_decade` – Decade label (e.g. *1990s*, *2000s*).
+- `estimated_generation_gwh` – Average across available generation-related columns.
+
+### Dataset File / Source Link
+
+- Local file used by the app:  
+  `data/global_power_plant_database.csv`
+
+- Example source link (replace with the exact URL you used):  
+  - WRI GitHub: `<https://github.com/wri/global-power-plant-database>`  
+  - or Kaggle: `<https://www.kaggle.com/>` (search: “Global Power Plant Database”)
+
+---
+
+## 3. Features and Visualizations
+
+The dashboard includes at least **9 distinct visualizations**, with **6+ advanced types**, all interactive:
+
+1. **Bar chart** – Top countries by total installed capacity (MW).  
+2. **Boxplot** – Distribution of plant capacity by primary fuel type.  
+3. **Scatter plot (log–log)** – Installed capacity vs estimated generation.  
+4. **Global map (Mapbox)** – Locations of plants, colored by fuel type, sized by capacity.  
+5. **Treemap** – Total capacity by primary fuel and country.  
+6. **Sunburst diagram** – Capacity by primary fuel and commissioning decade.  
+7. **Parallel coordinates plot** – Capacity (clipped), commissioning year, estimated generation.  
+8. **Heatmap (Altair)** – Total capacity by fuel type and commissioning decade.  
+9. **Sankey diagram** – Capacity flow from fuel types to countries (top 10 + “Other”).  
+10. **K-Means clustering scatter plot** – Clusters of plants based on capacity and estimated generation.
+
+**Interactivity includes:**
+
+- Sidebar filters (Streamlit):
+  - Country multiselect  
+  - Primary fuel multiselect  
+  - Capacity range slider  
+  - Commissioning year range slider  
+  - Cluster number slider (for K-Means)  
+- Interactive Plotly and Altair charts with:
+  - Hover tooltips  
+  - Zooming and panning  
+  - Dynamic filtering based on sidebar selections  
+
+---
+
+## 4. Installation and Setup Instructions
+
+### 4.1. Clone the Repository
 
 ```bash
-# clone the repo
 git clone https://github.com/<your-username>/global-power-plant-dashboard.git
 cd global-power-plant-dashboard
-
-# (optional) create virtual environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\\Scripts\\activate
-
-# install dependencies
-pip install -r requirements.txt
-
-# make sure the dataset is in the data/ folder
-# e.g. data/global_power_plant_database.csv
-
-# run the app
-streamlit run app.py
