@@ -144,7 +144,8 @@ global-power-plant-dashboard/
 -----------
 ## 6. Team Members and Contributions
 
-Our team consists of three members. Each member was responsible for **one basic visualization method** and **two advanced visualization methods**, in addition to shared tasks such as discussion of design choices and debugging.
+Our team consists of three members. Each member was responsible for **one basic visualization method** 
+**two advanced visualization methods**, in addition to shared tasks such as discussion of design choices and debugging.
 
 
 - **Kaan Çelik  – Data Loading, Preprocessing & Map-Based Analysis**  
