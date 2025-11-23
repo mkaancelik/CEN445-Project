@@ -184,10 +184,10 @@ In addition to the individual responsibilities listed above, all team members co
 - Reviewing the final report and README for clarity and consistency.
 
 Requrements:
--streamlit
--pandas
--numpy
--plotly
--altair
--scikit-learn
+*streamlit
+*pandas
+*numpy
+*plotly
+*altair
+*scikit-learn
 
