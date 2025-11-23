@@ -182,3 +182,12 @@ In addition to the individual responsibilities listed above, all team members co
 - Discussing the overall dashboard design and user experience.
 - Testing the application, fixing minor bugs, and refining the filters in the Streamlit sidebar.
 - Reviewing the final report and README for clarity and consistency.
+
+Requrements:
+-streamlit
+-pandas
+-numpy
+-plotly
+-altair
+-scikit-learn
+
