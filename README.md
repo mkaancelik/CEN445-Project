@@ -124,8 +124,6 @@ Then run:
 pip install -r requirements.txt
 4.4. Prepare the Dataset
 
-Create a folder named data in the project root if it does not exist.
-
 Download the Global Power Plant Database CSV file.
 
 Save it as:global_power_plant_database.csv
