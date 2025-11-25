@@ -58,7 +58,7 @@ In our project, we also derive:
   `global_power_plant_database.csv`
 
 - Example source link:  
-  - WRI GitHub: `<https://github.com/wri/global-power-plant-database>`  
+  - WRI GitHub: `<https://github.com/wri/global-power-plant-database/blob/master/output_database/global_power_plant_database.csv>`  
   - or Kaggle: `<https://www.kaggle.com/>` (search: “Global Power Plant Database”)
 
 ----
