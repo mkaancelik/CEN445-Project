@@ -138,7 +138,10 @@ global-power-plant-dashboard/
 ├─ README.md                    # Project documentation (this file)
 ├─ report.pdf / report.md       # One-page project report (optional)
 └─ global_power_plant_database.csv   # Dataset file (not committed if large)
------------
+
+```
+---
+
 ## 6. Team Members and Contributions
 
 Our team consists of three members. Each member was responsible for **one basic visualization method** 
