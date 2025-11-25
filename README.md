@@ -159,7 +159,7 @@ Our team consists of three members. Each member was responsible for **one basic 
     - Implemented the **global Mapbox map**, where each power plant is plotted with color = primary fuel and size = capacity.
     - Implemented the **treemap** summarizing *total installed capacity by fuel type and country*.
 
-- Galip Diler – Hierarchical, Multivariate & Flow Visualization Design**  
+- **Galip Diler – Hierarchical, Multivariate & Flow Visualization Design**  
   - Worked on the visual layout and consistency of chart titles, labels, legends, and color schemes.
   - **Basic method (1 simple visualization):**
     - Implemented the **boxplot** illustrating the *distribution of plant capacity by primary fuel type*.
@@ -168,7 +168,7 @@ Our team consists of three members. Each member was responsible for **one basic 
     - Implemented the **parallel coordinates plot** linking *capacity (clipped), commissioning year, and estimated generation* to support multivariate analysis.
     - Implemented the **Sankey diagram** visualizing the flow of total capacity from *primary fuel types* to the *top 10 countries*.
 
-- Ahmet Can Köreli  – Statistical Relationships, Heatmap & Machine Learning Component**  
+- **Ahmet Can Köreli  – Statistical Relationships, Heatmap & Machine Learning Component**  
   - Integrated the different tabs in Streamlit (Overview, Advanced Visualizations, Clustering & ML) and tested interactive behavior.
   - **Basic method (1 simple visualization):**
     - Implemented the **scatter plot (log–log)** of *installed capacity vs. estimated annual generation*, including hover tooltips.
