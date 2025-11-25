@@ -95,7 +95,7 @@ The dashboard includes at least **9 distinct visualizations**, with **6+ advance
 
 ## 4. Installation and Setup Instructions
 
-### 4.1. Clone the Repository
+### Clone the Repository
 
 ``` bash
 git clone https://github.com/mkaancelik//CEN445-Project.git
@@ -142,7 +142,7 @@ global-power-plant-dashboard/
 ```
 ---
 
-## 6. Team Members and Contributions
+## 5. Team Members and Contributions
 
 Our team consists of three members. Each member was responsible for **one basic visualization method** 
 **two advanced visualization methods**, in addition to shared tasks such as discussion of design choices and debugging.
