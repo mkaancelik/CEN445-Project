@@ -64,27 +64,27 @@ important_cols = [
     "estimated_generation_gwh_2017"
 ]
 
-# Sadece gerçekten var olan kolonları al
+# Only take columns that actually exist
 existing_cols = [c for c in important_cols if c in df.columns]
 df = df[existing_cols]
 
-# Longitude / Latitude temizliği
+# Longitude / Latitude cleaning
 df = df[
     df["latitude"].between(-90, 90) &
     df["longitude"].between(-180, 180)
 ]
 
-# Kapasite temizliği
+# Capacity cleaning
 df = df[df["capacity_mw"].notna()]
-# Aşırı uçları kırp (1. ve 99. percentile)
+# Trim the extreme ends (1. ve 99. percentile)
 q_low, q_high = df["capacity_mw"].quantile([0.01, 0.99])
 df["capacity_mw_clipped"] = df["capacity_mw"].clip(lower=q_low, upper=q_high)
 
-# Commissioning year numerik hale getir
+# Make commissioning year numeric
 if "commissioning_year" in df.columns:
     df["commissioning_year"] = pd.to_numeric(df["commissioning_year"], errors="coerce")
 
-# Basit "estimated_generation_gwh" kolonunu oluştur
+# Create simple "estimated_generation_gwh" column
 gen_cols = [c for c in df.columns if "estimated_generation_gwh_" in c] or \
            [c for c in df.columns if "generation_gwh_" in c]
 
@@ -93,7 +93,7 @@ if gen_cols:
 else:
     df["estimated_generation_gwh"] = np.nan
 
-# Commissioning decade (örn. 1990s, 2000s)
+# Commissioning decade (e.g. 1990s, 2000s)
 def decade_from_year(y):
     try:
         y = int(y)
@@ -109,13 +109,13 @@ if "commissioning_year" in df.columns:
 else:
     df["commissioning_decade"] = "Unknown"
 
-# Boş ülke adlarını doldur
+# Fill in the blank country names
 if "country_long" in df.columns:
     df["country_long"] = df["country_long"].fillna(df["country"])
 else:
     df["country_long"] = df["country"]
 
-# primary_fuel boşsa "Unknown"
+# "Unknown" if primary_fuel is empty
 df["primary_fuel"] = df["primary_fuel"].fillna("Unknown")
 
 # ------------------------------------------------------------
@@ -421,7 +421,7 @@ with tab2:
         .rename(columns={"capacity_mw": "total_capacity_mw"})
     )
 
-    # Sadece en yüksek kapasiteye sahip ilk 10 ülke
+    # Only the top 10 countries with the highest capacity
     top_sankey_countries = (
         sankey_df.groupby("country_long")["total_capacity_mw"]
         .sum()
