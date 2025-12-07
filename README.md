@@ -51,6 +51,8 @@ In our project, we also derive:
 - `capacity_mw_clipped` – Capacity clipped to the 1st and 99th percentile to reduce extreme outliers.
 - `commissioning_decade` – Decade label (e.g. *1990s*, *2000s*).
 - `estimated_generation_gwh` – Average across available generation-related columns.
+- `is_renewable` – Binary indicator showing whether the plant’s primary fuel is considered renewable.
+               (Hydro, Wind, Solar, Biomass, Geothermal, Wave and Tidal, Storage).
 
 ### Dataset File / Source Link
 
