@@ -430,6 +430,14 @@ with tab2:
         margin={"r": 0, "t": 40, "l": 0, "b": 0}
     )
     st.plotly_chart(fig_map, use_container_width=True)
+    
+    st.markdown(
+        """
+        **Insight:** This map shows the distribution of plants on the map is concentrated in large population and industrial areas.
+        Many power plants, especially those that use gas and oil, are clustered around coastal cities and port areas.
+        While hydro, wind, and solar power plants are spreading in rural areas, fossil fuel-fired plants are concentrated in industrial cities.
+        """
+    )
 
     st.subheader("5. Treemap – Capacity by Renewables, Fuel and Country")
 
@@ -465,6 +473,19 @@ with tab2:
         title="Treemap of Total Installed Capacity by Renewables, Fuel and Country",
     )
     st.plotly_chart(fig_treemap, use_container_width=True)
+    
+    st.markdown(
+        """
+        **Insight:** This map shows Coal, Gas, Hydroelectric and Nuclear – account for a very large percentage of total capacity.
+        When examined on a country basis, China has a dominant share in both renewable and fossil fuels, 
+        while the United States stands out with its high-capacity facilities.
+        China and India → coal-heavy
+        US → gas-heavy
+        Brazil / Norway / Canada → hydropower-heavy
+        France → nuclear-heavy
+        
+        """
+    )
 
 
     st.subheader("6. Sunburst – Fuel Mix by Commissioning Decade")
