@@ -374,7 +374,7 @@ with tab2:
     st.subheader("4. Global Map of Power Plants")
 
     st.markdown(
-        " Map of power plants colored by primary fuel and sized by capacity."
+        "  Locations of plants, colored by fuel type, sized by capacity."
     )
 
     # Renewable filter + color mode for map
