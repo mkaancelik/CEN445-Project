@@ -48,9 +48,6 @@ df = df_raw.copy()
 
 # Keep some important columns and standardize names
 # Columns from WRI spec: country, country_long, name, capacity_mw, latitude, longitude,
-# primary_fuel, other_fuel1-3, commissioning_year, owner, year_of_capacity_data,
-# generation_gwh_201x, estimated_generation_gwh_201x, ...
-# :contentReference[oaicite:1]{index=1}
 
 important_cols = [
     "country", "country_long", "name",
@@ -58,17 +55,18 @@ important_cols = [
     "primary_fuel", "other_fuel1", "other_fuel2", "other_fuel3",
     "commissioning_year", "owner", "year_of_capacity_data",
     "generation_gwh_2013", "generation_gwh_2014", "generation_gwh_2015",
-    "generation_gwh_2016", "generation_gwh_2017",
+    "generation_gwh_2016", "generation_gwh_2017","generation_gwh_2018", "generation_gwh_2019",
     "estimated_generation_gwh_2013", "estimated_generation_gwh_2014",
     "estimated_generation_gwh_2015", "estimated_generation_gwh_2016",
-    "estimated_generation_gwh_2017"
+    "estimated_generation_gwh_2017", "estimated_generation_gwh_2018", "estimated_generation_gwh_2019"
 ]
 
 # Only take columns that actually exist
 existing_cols = [c for c in important_cols if c in df.columns]
 df = df[existing_cols]
 
-# Longitude / Latitude cleaning
+# Safety filters for general use
+# Longitude / Latitude cleaning 
 df = df[
     df["latitude"].between(-90, 90) &
     df["longitude"].between(-180, 180)
@@ -76,6 +74,13 @@ df = df[
 
 # Capacity cleaning
 df = df[df["capacity_mw"].notna()]
+
+# Make the capacity numeric
+df["capacity_mw"] = pd.to_numeric(df["capacity_mw"], errors="coerce")
+
+# Discard empty and 0/negative capacity
+df = df[df["capacity_mw"].notna() & (df["capacity_mw"] > 0)]
+
 # Trim the extreme ends (1. ve 99. percentile)
 q_low, q_high = df["capacity_mw"].quantile([0.01, 0.99])
 df["capacity_mw_clipped"] = df["capacity_mw"].clip(lower=q_low, upper=q_high)
@@ -84,10 +89,9 @@ df["capacity_mw_clipped"] = df["capacity_mw"].clip(lower=q_low, upper=q_high)
 if "commissioning_year" in df.columns:
     df["commissioning_year"] = pd.to_numeric(df["commissioning_year"], errors="coerce")
 
-# Create simple "estimated_generation_gwh" column
-gen_cols = [c for c in df.columns if "estimated_generation_gwh_" in c] or \
-           [c for c in df.columns if "generation_gwh_" in c]
-
+# Create "estimated_generation_gwh" column
+gen_cols = [c for c in df.columns
+            if c.startswith("generation_gwh_") or c.startswith("estimated_generation_gwh_")]
 if gen_cols:
     df["estimated_generation_gwh"] = df[gen_cols].mean(axis=1, skipna=True)
 else:
@@ -108,6 +112,14 @@ if "commissioning_year" in df.columns:
     df["commissioning_decade"] = df["commissioning_year"].apply(decade_from_year)
 else:
     df["commissioning_decade"] = "Unknown"
+    
+# Decade order
+decade_order = sorted(df["commissioning_decade"].unique())
+df["commissioning_decade"] = pd.Categorical(
+    df["commissioning_decade"],
+    categories=[d for d in decade_order if d != "Unknown"] + ["Unknown"],
+    ordered=True
+)
 
 # Fill in the blank country names
 if "country_long" in df.columns:
@@ -118,12 +130,30 @@ else:
 # "Unknown" if primary_fuel is empty
 df["primary_fuel"] = df["primary_fuel"].fillna("Unknown")
 
+# --- Dataset-specific derived additional feature ---
+# Renewable / fossil flag
+renewables = {
+    "Hydro", "Wind", "Solar", "Biomass",
+    "Geothermal", "Wave and Tidal", "Storage"
+}
+df["is_renewable"] = df["primary_fuel"].isin(renewables)
+
+
 # ------------------------------------------------------------
 # 4. SIDEBAR FILTERS (GLOBAL INTERACTIVITY)
 # ------------------------------------------------------------
 st.sidebar.header("Filters")
 
-# Country filter – Top N countries by capacity, plus "All"
+# Fuel type filter
+fuel_types = sorted(df["primary_fuel"].dropna().unique().tolist())
+fuel_options = ["All"] + fuel_types
+
+selected_fuels = st.sidebar.multiselect(
+    "Primary Fuel Types",
+    options=fuel_options,
+    default=["All"]
+)
+# Country filter "
 top_country_capacity = (
     df.groupby("country_long")["capacity_mw"]
     .sum()
@@ -137,27 +167,18 @@ selected_countries = st.sidebar.multiselect(
     options=country_options,
     default=["All"]
 )
-
-# Fuel type filter
-fuel_types = sorted(df["primary_fuel"].dropna().unique().tolist())
-selected_fuels = st.sidebar.multiselect(
-    "Primary Fuel Types",
-    options=fuel_types,
-    default=fuel_types
-)
-
-# Capacity range slider
-cap_min = float(df["capacity_mw_clipped"].min())
-cap_max = float(df["capacity_mw_clipped"].max())
+# Capacity range filter
+cap_min = float(df["capacity_mw"].min())
+cap_max = float(df["capacity_mw"].max())
 
 capacity_range = st.sidebar.slider(
-    "Installed Capacity (MW, clipped)",
+    "Installed Capacity (MW)",
     min_value=int(cap_min),
     max_value=int(cap_max),
     value=(int(cap_min), int(cap_max))
 )
 
-# Year range slider (commissioning_year)
+# Year range filter (commissioning_year)
 if "commissioning_year" in df.columns and df["commissioning_year"].notna().sum() > 0:
     year_min = int(df["commissioning_year"].min())
     year_max = int(df["commissioning_year"].max())
@@ -178,21 +199,34 @@ if "All" not in selected_countries:
     filtered_df = filtered_df[filtered_df["country_long"].isin(selected_countries)]
 
 # Fuel filter
-filtered_df = filtered_df[filtered_df["primary_fuel"].isin(selected_fuels)]
+if "All" not in selected_fuels:
+    filtered_df = filtered_df[filtered_df["primary_fuel"].isin(selected_fuels)]
 
 # Capacity filter
 filtered_df = filtered_df[
-    (filtered_df["capacity_mw_clipped"] >= capacity_range[0]) &
-    (filtered_df["capacity_mw_clipped"] <= capacity_range[1])
+    (filtered_df["capacity_mw"] >= capacity_range[0]) &
+    (filtered_df["capacity_mw"] <= capacity_range[1])
 ]
 
 # Year filter
-if year_range is not None:
-    filtered_df = filtered_df[
-        filtered_df["commissioning_year"].between(year_range[0], year_range[1], inclusive="both")
-    ]
+if year_range is not None and "commissioning_year" in filtered_df.columns:
+    y0, y1 = year_range
 
-st.sidebar.markdown(f"**Filtered plants:** {len(filtered_df):,}")
+    # If the slider is in full range (the user did not narrow down the year)
+    # -> Also keep the plants with commissioning year NaN
+    if y0 == year_min and y1 == year_max:
+        filtered_df = filtered_df[
+            filtered_df["commissioning_year"].isna() |
+            filtered_df["commissioning_year"].between(y0, y1, inclusive="both")
+        ]
+    else:
+        # If the user narrowed down the year range
+        # -> Exclude NaN years, only show those in the selected range
+        filtered_df = filtered_df[
+            filtered_df["commissioning_year"].between(y0, y1, inclusive="both")
+        ]
+
+st.sidebar.markdown(f"**Total plants after filters:** {len(filtered_df):,}")
 
 # ------------------------------------------------------------
 # 5. TOP METRICS
@@ -224,27 +258,68 @@ tab1, tab2, tab3 = st.tabs([
 # TAB 1 – OVERVIEW
 # ------------------------------------------------------------
 with tab1:
-    st.subheader("1. Top Countries by Total Installed Capacity (Bar Chart)")
+    st.subheader("1. Top Countries by Total Installed Capacity")
 
-    top_n = st.slider("Number of countries to display", 5, 25, 10, key="top_countries_slider")
+    # A small control panel
+    col_bar1, col_bar2 = st.columns(2)
+    with col_bar1:
+        top_n = st.slider(
+            "Number of countries to display",
+            min_value=5,
+            max_value=25,
+            value=10,
+            step=1,
+            key="top_countries_slider"
+        )
+    with col_bar2:
+       # Plant type filter
+        plant_type_filter = st.selectbox(
+            "Plant type filter",
+            ["All plants", "Only renewables", "Only non-renewables"]
+        )
 
+    # Basic data
+    bar_df = filtered_df.copy()
+
+    # Optional renewable filter
+    if "is_renewable" in bar_df.columns:
+        if plant_type_filter == "Only renewables":
+            bar_df = bar_df[bar_df["is_renewable"]]
+        elif plant_type_filter == "Only non-renewables":
+            bar_df = bar_df[~bar_df["is_renewable"]]
+
+    # Total capacity by country
     country_cap = (
-        filtered_df.groupby("country_long")["capacity_mw"]
+        bar_df
+        .groupby("country_long", as_index=False)["capacity_mw"]
         .sum()
-        .sort_values(ascending=False)
+        .sort_values("capacity_mw", ascending=False)
         .head(top_n)
-        .reset_index()
     )
 
-    fig_bar = px.bar(
-        country_cap,
-        x="country_long",
-        y="capacity_mw",
-        title="Top Countries by Total Installed Capacity (MW)",
-        labels={"country_long": "Country", "capacity_mw": "Total Capacity (MW)"}
+    if country_cap.empty:
+        st.info("No data available for the selected filters.")
+    else:
+        fig_bar = px.bar(
+            country_cap,
+            x="country_long",
+            y="capacity_mw",
+            title="Top Countries by Total Installed Capacity",
+            labels={
+                "country_long": "Country",
+                "capacity_mw": "Total Installed Capacity (MW)",
+            }
+        )
+        fig_bar.update_layout(xaxis_tickangle=-45, showlegend=False)
+        st.plotly_chart(fig_bar, use_container_width=True)
+
+        st.markdown(
+        """
+        **Insight:** This chart shows which countries have the highest total installed capacity
+        under the current filters.
+        """
     )
-    fig_bar.update_layout(xaxis_tickangle=-45)
-    st.plotly_chart(fig_bar, use_container_width=True)
+
 
     st.subheader("2. Capacity Distribution by Primary Fuel (Boxplot)")
 
@@ -299,37 +374,84 @@ with tab2:
     st.subheader("4. Global Map of Power Plants")
 
     st.markdown(
-        "Interactive map of power plants colored by primary fuel and sized by capacity."
+        " Map of power plants colored by primary fuel and sized by capacity."
     )
 
+    # Renewable filter + color mode for map
+    col_map1, col_map2 = st.columns(2)
+    with col_map1:
+        renewable_filter_map = st.radio(
+            "Filter plants on map",
+            ["All plants", "Only renewables", "Only non-renewables"],
+            horizontal=False
+        )
+    with col_map2:
+        color_mode_map = st.radio(
+            "Color points by",
+            ["Primary fuel", "Renewable vs Non-renewable"],
+            horizontal=False
+        )
+
     map_sample = filtered_df.copy()
+
+    if renewable_filter_map == "Only renewables":
+        map_sample = map_sample[map_sample["is_renewable"]]
+    elif renewable_filter_map == "Only non-renewables":
+        map_sample = map_sample[~map_sample["is_renewable"]]
+
+    # Performance sampling for the map
     if len(map_sample) > 10000:
         map_sample = map_sample.sample(10000, random_state=42)
+
+    # Color column
+    if color_mode_map == "Primary fuel":
+        color_col = "primary_fuel"
+    else:
+        map_sample["renewable_label"] = np.where(
+            map_sample["is_renewable"], "Renewable", "Non-renewable"
+        )
+        color_col = "renewable_label"
+        
 
     fig_map = px.scatter_mapbox(
         map_sample,
         lat="latitude",
         lon="longitude",
-        color="primary_fuel",
+        color=color_col,
         size="capacity_mw_clipped",
-        size_max=15,
-        zoom=1,
-        mapbox_style="open-street-map",
         hover_name="name",
-        hover_data={
-            "country_long": True,
-            "capacity_mw": True,
-            "primary_fuel": True
-        },
+        hover_data=["country_long", "primary_fuel", "capacity_mw", "estimated_generation_gwh"],
+        zoom=1,
+        height=600,
         title="Global Distribution of Power Plants"
+    )
+    fig_map.update_layout(
+        mapbox_style="carto-positron",
+        margin={"r": 0, "t": 40, "l": 0, "b": 0}
     )
     st.plotly_chart(fig_map, use_container_width=True)
 
-    st.subheader("5. Treemap – Capacity by Fuel and Country")
+    st.subheader("5. Treemap – Capacity by Renewables, Fuel and Country")
+
+    treemap_mode = st.radio(
+        "Treemap plant type",
+        ["All plants", "Only renewables", "Only non-renewables"],
+        horizontal=True
+    )
+
+    treemap_base = filtered_df.copy()
+    if treemap_mode == "Only renewables":
+        treemap_base = treemap_base[treemap_base["is_renewable"]]
+    elif treemap_mode == "Only non-renewables":
+        treemap_base = treemap_base[~treemap_base["is_renewable"]]
+
+    treemap_base["renewable_label"] = np.where(
+        treemap_base["is_renewable"], "Renewable", "Non-renewable"
+    )
 
     treemap_df = (
-        filtered_df
-        .groupby(["primary_fuel", "country_long"])["capacity_mw"]
+        treemap_base
+        .groupby(["renewable_label", "primary_fuel", "country_long"])["capacity_mw"]
         .sum()
         .reset_index()
         .rename(columns={"capacity_mw": "total_capacity_mw"})
@@ -337,12 +459,13 @@ with tab2:
 
     fig_treemap = px.treemap(
         treemap_df,
-        path=["primary_fuel", "country_long"],
+        path=["renewable_label", "primary_fuel", "country_long"],
         values="total_capacity_mw",
-        color="primary_fuel",
-        title="Treemap of Total Installed Capacity by Fuel and Country"
+        color="renewable_label",
+        title="Treemap of Total Installed Capacity by Renewables, Fuel and Country",
     )
     st.plotly_chart(fig_treemap, use_container_width=True)
+
 
     st.subheader("6. Sunburst – Fuel Mix by Commissioning Decade")
 
