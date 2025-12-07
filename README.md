@@ -36,7 +36,7 @@ Each row represents a single grid-scale power plant (typically ≥ 1 MW) and inc
 - **Technical attributes**
   - `capacity_mw` – Installed capacity in megawatts (MW)  
   - `primary_fuel` – Main fuel type (Coal, Gas, Hydro, Wind, Solar, Nuclear, Biomass, etc.)  
-  - `other_fuel1`, `other_fuel2`, `other_fuel3` – Additional fuels (if any)  
+   
 
 - **Temporal attributes**
   - `commissioning_year` – Approximate year the plant was commissioned  
