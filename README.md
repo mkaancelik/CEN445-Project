@@ -77,8 +77,7 @@ The dashboard includes at least **9 distinct visualizations**, with **6+ advance
 6. **Sunburst diagram** – Capacity by primary fuel and commissioning decade.  
 7. **Parallel coordinates plot** – Capacity (clipped), commissioning year, estimated generation.  
 8. **Heatmap (Altair)** – Total capacity by fuel type and commissioning decade.  
-9. **Sankey diagram** – Capacity flow from fuel types to countries (top 10 + “Other”).  
-10. **K-Means clustering scatter plot** – Clusters of plants based on capacity and estimated generation.
+9. **K-Means clustering scatter plot** – Clusters of plants based on capacity and estimated generation.
 
 **Interactivity includes:**
 
