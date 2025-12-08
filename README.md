@@ -9,7 +9,7 @@ This repository contains an interactive data visualization dashboard built with 
 The main objective of this project is to design and implement an **exploratory data visualization dashboard** that:
 
 - Provides an interactive and user-friendly interface for exploring the global power plant dataset.
-- Uses multiple advanced visualization techniques (treemap, sunburst, parallel coordinates, Sankey diagram, maps, etc.).
+- Uses multiple advanced visualization techniques (treemap, sunburst, parallel coordinates, maps, etc.).
 - Enables users to filter and drill down into the data using controls such as dropdowns, sliders, and multiselect widgets.
 - Demonstrates the use of a basic machine learning model (K-Means) to cluster power plants based on their characteristics.
 
@@ -168,7 +168,6 @@ Our team consists of three members. Each member was responsible for **one basic 
   - **Advanced methods (2 complex visualizations):**
     - Implemented the **sunburst diagram** showing *installed capacity by primary fuel and commissioning decade*.
     - Implemented the **parallel coordinates plot** linking *capacity (clipped), commissioning year, and estimated generation* to support multivariate analysis.
-    - Implemented the **Sankey diagram** visualizing the flow of total capacity from *primary fuel types* to the *top 10 countries*.
 
 - **Ahmet Can Köreli  – Statistical Relationships, Heatmap & Machine Learning Component**  
   - Integrated the different tabs in Streamlit (Overview, Advanced Visualizations, Clustering & ML) and tested interactive behavior.
